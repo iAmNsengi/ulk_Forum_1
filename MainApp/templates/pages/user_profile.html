@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %} Profile {% endblock %}
+
+{% block css%}
+<style>
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+
+body {
+    min-height: 100vh;
+    overflow-x:hidden;
+}
+    </style>
+
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="row py-5 px-4 mt-0"> 
+    <div class="col-md-9 mx-auto"> 
+    <!-- Profile widget --> 
+    <div class="bg-white shadow rounded overflow-hidden"> 
+        <div class="px-4 pt-0 pb-4 cover"> 
+            <div class="media align-items-end profile-head"> 
+                <div class="profile mr-3">
+                    <img src="{{profile.avatar.url}}" alt="..." style=" width:130px; height:130px; border-radius:50%;  " class=" mb-2 img">
+                    {% if isMyProfile is False %}
+                        {% if amFollowing is False %}
+                            <a href="/profile/{{profile.user.username}}/follow/" class="btn btn-info btn-sm btn-block">Follow</a>
+                        {% else %}
+                            <a href="/profile/{{profile.user.username}}/follow/" class="btn btn-outline-info btn-sm btn-block">UnFollow</a>
+                        {% endif %}
+                    {% endif %}
+                </div> 
+                <div class="media-body mb-5 text-white"> 
+                    {% if profile.name %}
+                    <h4 class="mt-0 mb-0">{{profile.name}}</h4> 
+                    {% endif %}
+                    <p class="small mb-4"> 
+                        <i class="fas fa-user mr-2"></i>{{profile.user}}</p> 
+                    </div> 
+                </div> 
+            </div> 
+            <div class="bg-light p-4 d-flex justify-content-end text-center"> 
+                <ul class="list-inline mb-0"> 
+                    <li class="list-inline-item"> 
+                    <h5 class="font-weight-bold mb-0 d-block">{{posts.count}}</h5><small class="text-muted"> <i class="fas fa-image mr-1"></i>Post(s)</small> 
+                </li> <li class="list-inline-item"> 
+                    <h5 class="font-weight-bold mb-0 d-block">{{profile.followers.count}}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small> 
+                </li> 
+                <li class="list-inline-item"> 
+                <h5 class="font-weight-bold mb-0 d-block">{{profile.following.count}}</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small> 
+            </li> </ul> </div> <div class="px-4 py-3"> 
+                    <h5 class="mb-0">Bio:</h5> 
+                    <div class="p-4 rounded shadow-sm bg-light"> 
+                        <p class="font-italic mb-0">{{profile.bio}}</p> 
+                    </div> 
+                    
+                </div> 
+                <div class="py-4 px-4"> <div class="d-flex align-items-center justify-content-between mb-3"> <h5 class="mb-0">Posts {{posts.count}}</h5> 
+                </div> 
+                {% for post in posts %}
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="media flex-wrap w-100 align-items-center"> 
+
+                        <div class="text-muted small ml-3">
+                            <div ><strong class="float-right">{{post.timestamp | naturaltime }}</strong></div>
+                        </div>
+                    </div>
+                </div>    
+                <a href="/post/{{post.id}}/" style="color:black;">     
+                <div class="card-body">
+                    <p>{{post.post | safe}}</p>
+                </div>
+                <div class="card-footer d-flex flex-wrap justify-content-between align-items-center px-0 pt-0 pb-3">
+                    <a href="/post/{{post.id}}/like/" class=" mt-2 ml-3 mr-3">
+                        <i class="fas fa-thumbs-up"></i>  Helpful ({{post.likes.count}})
+                    </a>
+                    <a href="/post/{{post.id}}/dislike/" class=" mt-2 ml-3">
+                        <i class="fas fa-thumbs-down"></i>  Not helpful ({{post.dislikes.count}})
+                    </a>
+                    <div class=" mt-2 ml-3">
+                        <i class="fas fa-comments"></i>Comment(s) ({{post.comments.count}})
+                    </div>
+                    {% if isMyProfile is True %}
+                    <button class="btn btn-danger mt-1 mr-2 text-light show-modal" data-toggle="modal" data-target="#deletePost" type="button" ><i class="fas fa-trash"></i>Delete Post</button>
+                    <!-- <a href="/post/{{post.id}}/delete/" class="btn btn-danger mt-1 mr-2 text-light">
+                         Delete Post
+                    </a> -->
+                    <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content clearfix">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <div class="modal-body">
+                                <h4>Are you sure you want to Delete Post?</h4>
+                                    <a href="/post/{{post.id}}/delete/" style="background-color: rgb(190, 21, 21);" class="btn btn-danger mt-1 mr-2 text-light">
+                         Delete Post
+                    </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    {% endif %}
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+            </div> 
+        </div> 
+    </div>
+</div>
+
+{% endblock %}

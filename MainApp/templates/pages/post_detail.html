@@ -1,0 +1,86 @@
+{% extends '../base.html'%} {% load humanize %} {% block title %} {{post.id}} 
+{%endblock %} {% block content %}
+<div class="container">
+  <div class="row mb-2 mt-4">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <div class="card-header">
+          <div class="media flex-wrap w-100 align-items-center">
+            <img
+              src="{{post.user.avatar.url}}"
+              class="d-block ui-w-40 rounded-circle"
+              alt=""
+              width="40px"
+              height="40px"
+            />
+
+            <div class="media-body ml-3">
+              <a data-abc="true">{{post.user.user}}</a>
+            </div>
+            <div class="text-muted small ml-3">
+              <div><strong>{{post.timestamp | naturaltime }}</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>{{post.post | safe}}</p>
+        </div>
+        <div
+          class="card-footer d-flex flex-wrap align-items-center px-0 pt-0 pb-3"
+        >
+          <a href="/post/{{post.id}}/like/" class="mt-2 ml-3 mr-3">
+            <i class="fas fa-thumbs-up"></i> Helpful ({{post.likes.count}})
+          </a>
+          <a href="/post/{{post.id}}/dislike/" class="mt-2 ml-3">
+            <i class="fas fa-thumbs-down"></i> Not helpful
+            ({{post.dislikes.count}})
+          </a>
+          <div class="mt-2 ml-3">
+            <i class="fas fa-comments"></i>{{comments.count}} Comment(s)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="form-group mt-0">
+      <form method="post">
+        {%csrf_token%} {{form.media}} {{form.post}}
+        <button type="submit" class="btn btn-success mt-2">Add Comment</button>
+      </form>
+    </div>
+  </div>
+  <!-- comments  -->
+  <div class="container">
+    {% for comment in comments %}
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <div class="card mb-4">
+          <div class="card-header">
+            <div class="media flex-wrap w-100 align-items-center">
+              <img
+                src="{{post.user.avatar.url}}"
+                class="d-block ui-w-40 rounded-circle"
+                alt=""
+                width="40px"
+                height="40px"
+              />
+
+              <div class="media-body ml-3">
+                <a data-abc="true">{{comment.user}}</a>
+              </div>
+              <div class="text-muted small ml-3">
+                <div><strong>{{comment.timestamp | naturaltime }}</strong></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>{{comment.comment | safe}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

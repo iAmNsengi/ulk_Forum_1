@@ -1,0 +1,45 @@
+{% extends '../base.html'%} 
+{% load humanize %} 
+{% block title %} Search Result 
+{%endblock %} 
+
+{% block content %}
+<div class="container jumbotron">
+    <h3 class="mt-4">Search Results</h3>
+    <h5></h5>
+    <small class="form-text text-muted">{{object_list.count}} results found</small
+                ><br />
+    <hr>
+
+    <ul class="mt-2">
+        {%for post in object_list %}
+        
+        <a href="/post/{{post.id}}"><li>{{post.post|safe}}</li> </a>
+
+        {%endfor%}
+        <!-- {% if is_paginated %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li><a href="?q=q page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li><a href="?q=q page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+    </ul>
+</div> -->
+
+
+{% endblock %}
